@@ -11,6 +11,7 @@ const app = express();
 
 // listen to get requests on any url
 app.get('*', (req, res) => {
+  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   let userAgent = req.get('User-Agent');
   let software = userAgent.substr(0,userAgent.indexOf(')')).slice(userAgent.indexOf('(')+1);
@@ -19,7 +20,7 @@ app.get('*', (req, res) => {
   let language = acceptLanguage.substr(0,acceptLanguage.indexOf(','));
 
   res.send({
-    'ipaddress': req.ip,
+    'ipaddress': ip,
     'language': language,
     'software': software
   });
